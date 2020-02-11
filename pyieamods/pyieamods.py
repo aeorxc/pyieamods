@@ -18,7 +18,7 @@ def allmods(sdbstxt_zip_loc, raw=False):
     res['STOCKSDAT'] = stockdat(z, raw)
     res['OECDDE'] = oecdde(z, raw)
     res['NOECDDE'] = noecdde(z, raw)
-    res['SUMMARY'] = summary(z, raw)
+    # res['SUMMARY'] = summary(z, raw)
 
     return res
 
@@ -62,15 +62,15 @@ def noecdde(z, raw=False):
     df = df.groupby(['date', 'series']).mean().unstack()['value']
     return df
 
-
-def summary(z, raw=False):
-    df = pd.read_csv(z.open('SUMMARY.TXT'), sep='\s+', header=None, names=names2)
-    if raw:
-        return df
-
-    df['series'] = df.apply(lambda x: 'IEA.SUMMARY.{}.{}'.format(x.commod, x.region), 1)
-    df = df.groupby(['date', 'series']).mean().unstack()['value']
-    return df
+#
+# def summary(z, raw=False):
+#     df = pd.read_csv(z.open('SUMMARY.TXT'), sep='\s+', header=None, names=names2)
+#     if raw:
+#         return df
+#
+#     df['series'] = df.apply(lambda x: 'IEA.SUMMARY.{}.{}'.format(x.commod, x.region), 1)
+#     df = df.groupby(['date', 'series']).mean().unstack()['value']
+#     return df
 
 
 def stockdat(z, raw=False):
