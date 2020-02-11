@@ -23,7 +23,7 @@ class TestpyModsIEA(unittest.TestCase):
 
         self.assertIn('SUMMARY', res)
         summary = res['SUMMARY']
-        self.assertIn('IEA.SUMMARY.FINAL.AMEDEM', summary.columns)
+        self.assertIn('IEA.SUMMARY.AMEDEM.FINAL', summary.columns)
 
         self.assertIn('SUPPLY', res)
         supply = res['SUPPLY']
@@ -35,7 +35,8 @@ class TestpyModsIEA(unittest.TestCase):
 
         self.assertIn('OECDDE', res)
         oecdde = res['OECDDE']
-        self.assertIn('IEA.OECDDE.JETANDKERO', oecdde.columns)
+        self.assertIn('IEA.OECDDE.JETANDKERO.AUSTRALI', oecdde.columns)
+        self.assertEqual(oecdde['IEA.OECDDE.LPGETHANE.AUSTRALI']['2015-01'].iloc[0], 77.4722)
 
 
 if __name__ == '__main__':
