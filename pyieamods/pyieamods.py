@@ -1,4 +1,4 @@
-import pandas as pd
+import pandas as pd, os
 import zipfile
 
 names1 = ['commod', 'region', 'balitem', 'date', 'value']
@@ -22,6 +22,12 @@ def allmods(sdbstxt_zip_loc, raw=False):
     res['SUMMARY'] = summary(z, raw)
 
     return res
+
+
+def to_excel(allmods, outp):
+    for dataset in allmods:
+        outpf = os.path.join(outp, '{}.xlsx'.format(dataset))
+        allmods[dataset].to_excel(outpf)
 
 
 def proddat(z, raw=False):
