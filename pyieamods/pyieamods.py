@@ -44,6 +44,11 @@ def to_excel(allmods, outp):
 def read_filename(z:str, filename:str, raw:bool=False) -> pd.DataFrame:
     col_headers = sdbstxt_mapping[filename]['col_headers']
     prefix = sdbstxt_mapping[filename]['prefix']
+    filenamedict = {x.filename.lower() : x.filename for x in z.filelist}
+    filename_lower = filename.lower()
+    if filename_lower in filenamedict.keys():
+        filename = filenamedict[filename_lower]
+
     df = pd.read_csv(z.open(filename), sep='\s+', header=None, names=col_headers, parse_dates=['date'])
 
     if raw:
