@@ -23,11 +23,15 @@ sdbstxt_mapping = {
 }
 
 
-def allmods(sdbstxt_zip_loc:str, raw:bool=False):
+def read_mods(sdbstxt_zip_loc:str, raw:bool=False, specific_files=None):
     z = zipfile.ZipFile(sdbstxt_zip_loc)
     res = []
+
+    files_to_proces = filenames
+    if specific_files:
+        files_to_proces = specific_files
     # filenames = ['PRODDAT.TXT']
-    for filename in filenames:
+    for filename in files_to_proces:
         res.append(dask.delayed(read_filename(z, filename, raw)))
 
     res = dask.compute(*res)
@@ -67,13 +71,14 @@ def read_filename(z:str, filename:str, raw:bool=False) -> pd.DataFrame:
         df['series'] = df.apply(lambda x: 'IEA.SUPPLY.{}.{}'.format(x.commod, x.region), 1)
     else:
         df['series'] = df.apply(lambda x: '%s.%s.%s.%s' % (prefix, x[col_headers[0]], x[col_headers[1]], x[col_headers[2]]), 1)
+    df['value'] = pd.to_numeric(df["value"], downcast="float", errors='coerce')
     df = df.groupby(['date', 'series']).mean().unstack()['value']
     df.attrs['filename'] = filename
     return df
 
 
 def get_series(series_name: str, source_loc:str) -> pd.DataFrame:
-    mods = allmods(source_loc)
+    mods = read_mods(source_loc)
     prefixmap = {sdbstxt_mapping[x]['prefix']:x for x in sdbstxt_mapping }
     prefix = '.'.join(series_name.split('.')[0:2])
 
