@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name="pyieamods",
-    version="1.0.7",
+    version="1.0.8",
     author="aeorxc",
     author_email="author@example.com",
     description="wrapper around IEA Monthly Oil Data Service",
